@@ -9,7 +9,10 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         loadScreen(new NewsFeedPage());
+
     }
 
     void loadScreen(Fragment fragment) {
@@ -50,9 +54,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 bottomNavigationView.getMenu().getItem(0).setChecked(true);
                 break;
 
+
             case R.id.fakeNewsPage:
                 loadScreen(new FakeNewsFragment());
                 bottomNavigationView.getMenu().getItem(1).setChecked(true);
+                //Toast.makeText(MainActivity.this,"Works",Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.appointmentsPage:

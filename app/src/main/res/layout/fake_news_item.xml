@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="310dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="10dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/upper_image"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            app:cardCornerRadius="0dp">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/fake_news_trial"/>
+        </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/news_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:fontFamily="sans-serif-black"
+            android:layout_below="@+id/upper_image"
+            android:text="Prime Minister Narendra Modi, in an address to the nation, announced an extension of Pradhan Mantri Gareeb Kalyan Anna Yojana - the key government scheme to distribute free food grains to 80 crore people - till November to provide relief to the poor during the festival season amid the coronavirus crisis. "
+            android:layout_margin="5dp"/>
+        <ImageView
+            android:id="@+id/news_head_image"
+            android:layout_below="@+id/news_text"
+            android:src="@drawable/news_head_image"
+            android:layout_margin="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"/>
+
+        <TextView
+            android:id="@+id/time_text"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:fontFamily="sans-serif"
+            android:layout_below="@id/news_text"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_toEndOf="@+id/news_head_image"
+            android:text="15m ago" />
+
+        <Button
+            android:id="@+id/false_news_bttn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignRight="@id/news_text"
+            android:layout_below="@id/news_text"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/fake_news_sign"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/news_text"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="80dp"
+            android:background="@drawable/true_news_sign"
+            android:layout_toEndOf="@+id/time_text" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
