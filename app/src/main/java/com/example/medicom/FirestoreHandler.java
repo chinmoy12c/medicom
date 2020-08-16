@@ -52,4 +52,8 @@ public class FirestoreHandler {
     void fetchFakeNews(RecyclerView newsList){
         newsList.setAdapter(new FakeNewsAdapter(context));
     }
+
+    public void fetchNeedHelp(RecyclerView needHelpList) {
+        needHelpList.setAdapter(new NeedHelpAdapter(context));
+    }
 }
