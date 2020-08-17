@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 public class FakeNewsFragment extends Fragment {
     RecyclerView fakenews;
-    
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
