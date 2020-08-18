@@ -6,6 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".NewsFeedPage">
 
+    <View
+        android:id="@+id/backgroundView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000000"
+        android:alpha="0.2"
+        android:elevation="2dp"
+        />
+
     <TextView
         android:id="@+id/needHelpBanner"
         android:layout_width="wrap_content"
@@ -37,11 +46,11 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/needHelpContainer"
         android:layout_marginTop="10dp"/>
+
     <androidx.cardview.widget.CardView
         android:layout_width="70dp"
         android:layout_alignParentBottom="true"
         android:layout_height="70dp"
-        android:layout_above="@+id/bottomNavigation"
         android:layout_alignParentEnd="true"
         android:layout_margin="20dp"
         app:cardCornerRadius="50dp">
@@ -56,5 +65,56 @@
         android:padding="10dp"/>
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/popupCard"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="100dp"
+        app:cardCornerRadius="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/problemBanner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Describe your problem"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"/>
+
+            <EditText
+                android:id="@+id/problemDescription"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_below="@+id/problemBanner"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/rectangle_edit_text_blue"
+                android:gravity="top"
+                android:padding="10dp"/>
+
+            <Button
+                android:id="@+id/postProblem"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@+id/problemDescription"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_button_grad_blue"
+                android:text="Done"
+                android:textColor="#ffffff"
+                android:textSize="18sp"/>
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 
 </RelativeLayout>

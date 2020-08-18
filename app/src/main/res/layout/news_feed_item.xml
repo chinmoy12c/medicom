@@ -22,7 +22,8 @@
             android:layout_marginTop="20dp"
             android:text="chinmoy12c"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_toStartOf="@+id/answersCountImg"/>
 
         <TextView
             android:id="@+id/postTime"
@@ -33,6 +34,7 @@
             android:text="2 days ago"/>
 
         <ImageView
+            android:id="@+id/answersCountImg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/answersCount"
