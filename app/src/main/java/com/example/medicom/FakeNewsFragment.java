@@ -10,13 +10,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 public class FakeNewsFragment extends Fragment {
     RecyclerView fakenews;
@@ -53,7 +51,7 @@ public class FakeNewsFragment extends Fragment {
         searchNews.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getContext(),search_news_results.class);
+                Intent intent=new Intent(getContext(), SearchNewsResults.class);
                 startActivity(intent);
 
             }

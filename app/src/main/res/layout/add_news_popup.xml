@@ -20,13 +20,14 @@
             android:text="ENTER NEWS"
             android:textSize="25sp"
             android:fontFamily="sans-serif-black"
-            android:layout_toEndOf="@id/search_icon"/>
+            />
 
         <ImageView
             android:id="@+id/search_icon"
             android:layout_width="40dp"
             android:layout_height="30dp"
             android:layout_marginTop="50dp"
+            android:layout_toStartOf="@id/enter_news_text"
             android:src="@drawable/search_icon" />
 
         <EditText
@@ -36,7 +37,7 @@
             android:layout_below="@+id/enter_news_text"
             android:layout_margin="10dp"
             android:layout_marginTop="2dp"
-            android:background="@drawable/edit_text_shape_rec"
+            android:background="@drawable/rectangle_edit_text_blue"
             android:layout_marginBottom="10dp"
 
             android:textSize="20sp"
