@@ -29,22 +29,7 @@
         android:layout_above="@+id/bottomNavigation"
         />
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_above="@+id/bottomNavigation"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="20dp"
-        app:cardCornerRadius="50dp">
 
-        <ImageView
-            android:id="@+id/addIssue"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/post_add"
-            android:padding="10dp"/>
-
-    </androidx.cardview.widget.CardView>
 
     <View
         android:layout_width="match_parent"
