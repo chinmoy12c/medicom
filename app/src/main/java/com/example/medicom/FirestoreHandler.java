@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
@@ -34,12 +35,12 @@ public class FirestoreHandler {
         Picasso.get().load(path).into(imageView);
     }
 
-    void fetchNewsFeed(final RecyclerView newsList) {
+    void fetchNewsFeed(final RecyclerView newsList, final BottomNavigationView bottomNavigationView) {
         db.collection(ISSUE_COLLECTION).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        newsList.setAdapter(new NewsFeedAdapter(context, queryDocumentSnapshots));
+                        newsList.setAdapter(new NewsFeedAdapter(context, queryDocumentSnapshots, bottomNavigationView));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

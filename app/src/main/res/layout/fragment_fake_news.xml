@@ -15,14 +15,13 @@
         android:layout_width="70dp"
         android:layout_alignParentBottom="true"
         android:layout_height="70dp"
-        android:layout_above="@+id/bottomNavigation"
         android:layout_alignParentEnd="true"
         android:layout_margin="20dp"
         app:cardCornerRadius="50dp">
 
     <ImageView
         android:id="@+id/addIssue"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

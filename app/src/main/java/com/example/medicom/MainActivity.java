@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setSupportActionBar(toolbar);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
-        loadScreen(new NewsFeedPage());
+        loadScreen(new NewsFeedPage(bottomNavigationView));
 
     }
 
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         switch (item.getItemId()) {
 
             case R.id.feedPage:
-                loadScreen(new NewsFeedPage());
+                loadScreen(new NewsFeedPage(bottomNavigationView));
                 bottomNavigationView.getMenu().getItem(0).setChecked(true);
                 break;
 

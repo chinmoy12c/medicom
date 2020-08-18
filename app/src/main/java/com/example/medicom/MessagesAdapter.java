@@ -1,6 +1,7 @@
 package com.example.medicom;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,17 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)messageText.getLayoutParams();
                 params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                messageText.setLayoutParams(params);
+            }
+
+            if (userMessage.contains("appointment")){
+                userMessage =  "appointment fixed " + userMessage.substring(userMessage.indexOf("appointment")+11);
+                messageText.setBackground(context.getResources().getDrawable(R.drawable.rounded_button_grad_blue));
+                messageText.setTextColor(Color.WHITE);
+                messageText.setPadding(10, 0, 10, 0);
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)messageText.getLayoutParams();
+                params.addRule(RelativeLayout.CENTER_HORIZONTAL);
                 messageText.setLayoutParams(params);
             }
             messageText.setText(userMessage);

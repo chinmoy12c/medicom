@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class NewsFeedPage extends Fragment {
 
     private RecyclerView newsList;
@@ -23,6 +25,11 @@ public class NewsFeedPage extends Fragment {
     private CardView popupCard;
     private View background;
     private ImageView addIssue;
+    private BottomNavigationView bottomNavigationView;
+
+    public NewsFeedPage(BottomNavigationView bottomNavigationView) {
+        this.bottomNavigationView = bottomNavigationView;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,7 +46,7 @@ public class NewsFeedPage extends Fragment {
         needHelpList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         firestoreHandler = new FirestoreHandler(getContext());
-        firestoreHandler.fetchNewsFeed(newsList);
+        firestoreHandler.fetchNewsFeed(newsList, bottomNavigationView);
         firestoreHandler.fetchNeedHelp(needHelpList);
 
         background.setOnClickListener(new View.OnClickListener() {
