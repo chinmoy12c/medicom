@@ -9,15 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginScreenUser">
-        </activity>
-        <activity android:name=".LoginScreenDoctor">
-        </activity>
-        <activity android:name=".LoginScreenMain">
-
-        </activity>
+        <activity android:name=".SearchNewsResults"></activity>
+        <activity android:name=".LoginScreenUser"></activity>
+        <activity android:name=".LoginScreenDoctor"></activity>
+        <activity android:name=".LoginScreenMain"></activity>
         <activity android:name=".IssueDetailsScreen" />
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
