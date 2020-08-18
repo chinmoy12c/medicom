@@ -50,23 +50,9 @@
             android:layout_toEndOf="@+id/news_head_image"
             android:text="15m ago" />
 
-        <Button
-            android:id="@+id/false_news_bttn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignRight="@id/news_text"
-            android:layout_below="@id/news_text"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/fake_news_sign"/>
 
-        <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_below="@id/news_text"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="80dp"
-            android:background="@drawable/true_news_sign"
-            android:layout_toEndOf="@+id/time_text" />
+
+
 
 
     </RelativeLayout>
