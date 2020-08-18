@@ -1,6 +1,9 @@
 package com.example.medicom;
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,6 +23,7 @@ public class FakeNewsFragment extends Fragment {
     ImageView addNews;
     AlertDialog alertDialog;
     AlertDialog.Builder builder;
+    Button searchNews;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,7 +49,17 @@ public class FakeNewsFragment extends Fragment {
         builder=new AlertDialog.Builder(getContext());
         View view=getLayoutInflater().inflate(R.layout.add_news_popup,null);
         builder.setView(view);
+        searchNews=view.findViewById(R.id.search_bttn);
+        searchNews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getContext(),search_news_results.class);
+                startActivity(intent);
+
+            }
+        });
         alertDialog=builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.show();
 
 
