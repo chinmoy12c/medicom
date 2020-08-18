@@ -56,8 +56,10 @@
         <TextView
             android:id="@+id/postDescription"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="match_parent"
             android:layout_below="@+id/postImage"
+            android:layout_above="@+id/consultPrivate"
+            android:layout_marginBottom="10dp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:textAlignment="textStart"
@@ -67,7 +69,7 @@
             android:text="Miles Scott stole everyone's heart as a 5-year-old leukemia patient who took over San Francisco in 2013 as Batkid after he told the Make-A-Wish Foundation that he wanted to be Batman. People crowded the streets to cheer him on after San Francisco was turned into Gotham for a day with the help of late mayor Ed Lee and 20,000 volunteers. This year, the foundation announced that Miles, now 10, has been in remission for five years. This is an important milestone when many people can be considered as likely to be cancer-free."/>
 
         <Button
-            android:id="@+id/consult"
+            android:id="@+id/consultPublic"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_alignParentBottom="true"
@@ -75,7 +77,19 @@
             android:layout_marginEnd="30dp"
             android:background="#1E57CA"
             android:layout_marginBottom="10dp"
-            android:text="Consult"
+            android:text="Consult Here"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:id="@+id/consultPrivate"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_above="@+id/consultPublic"
+            android:background="#1E57CA"
+            android:layout_marginBottom="10dp"
+            android:text="Consult in private"
             android:textColor="@android:color/white"/>
 
     </RelativeLayout>

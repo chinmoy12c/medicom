@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ public class NewsFeedPage extends Fragment {
     private FirestoreHandler firestoreHandler;
     private CardView popupCard;
     private View background;
+    private ImageView addIssue;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,6 +33,7 @@ public class NewsFeedPage extends Fragment {
         needHelpList = rootView.findViewById(R.id.needHelpContainer);
         popupCard = rootView.findViewById(R.id.popupCard);
         background = rootView.findViewById(R.id.backgroundView);
+        addIssue = rootView.findViewById(R.id.addIssue);
 
         newsList.setLayoutManager(new LinearLayoutManager(getContext()));
         needHelpList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -44,6 +47,14 @@ public class NewsFeedPage extends Fragment {
             public void onClick(View v) {
                 background.setVisibility(View.INVISIBLE);
                 popupCard.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        addIssue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                background.setVisibility(View.VISIBLE);
+                popupCard.setVisibility(View.VISIBLE);
             }
         });
 
