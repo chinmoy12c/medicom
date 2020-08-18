@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,6 +63,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
             if (userMessage.contains("user ")){
                 userMessage = userMessage.substring(userMessage.indexOf("user ")+5);
                 messageText.setBackground(context.getResources().getDrawable(R.drawable.message_back_white));
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)messageText.getLayoutParams();
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                messageText.setLayoutParams(params);
             }
             messageText.setText(userMessage);
         }
