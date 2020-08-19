@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="310dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp">
     <RelativeLayout
@@ -11,13 +11,13 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/upper_image"
             android:layout_width="match_parent"
-            android:layout_height="125dp"
+            android:layout_height="wrap_content"
             app:cardCornerRadius="0dp">
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="125dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/fake_news_trial"/>
+                android:src="@drawable/breaking_news"/>
         </androidx.cardview.widget.CardView>
         <TextView
             android:id="@+id/news_text"
@@ -25,14 +25,14 @@
             android:layout_height="wrap_content"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
+            android:textSize="15sp"
             android:fontFamily="sans-serif-black"
             android:layout_below="@+id/upper_image"
-            android:text="Prime Minister Narendra Modi, in an address to the nation, announced an extension of Pradhan Mantri Gareeb Kalyan Anna Yojana - the key government scheme to distribute free food grains to 80 crore people - till November to provide relief to the poor during the festival season amid the coronavirus crisis. "
-            android:layout_margin="5dp"/>
+            android:layout_margin="10dp"/>
         <ImageView
             android:id="@+id/news_head_image"
             android:layout_below="@+id/news_text"
-            android:src="@drawable/news_head_image"
+            android:src="@drawable/fake_head"
             android:layout_margin="10dp"
             android:layout_width="50dp"
             android:layout_height="50dp"/>
