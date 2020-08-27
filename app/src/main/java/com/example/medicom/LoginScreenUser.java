@@ -9,23 +9,21 @@ import android.widget.Toast;
 
 public class LoginScreenUser extends AppCompatActivity {
 
-    private EditText userName, userId, userPass;
+    private EditText userId, userPass;
+    private FirestoreHandler firestoreHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen_user);
 
-        userName = findViewById(R.id.userName);
         userId = findViewById(R.id.userId);
         userPass = findViewById(R.id.userPass);
+        firestoreHandler = new FirestoreHandler(this);
     }
 
     private boolean validateInputs() {
-        if (userName.getText().toString().trim().equals("")) {
-            makeToast("Please enter your name");
-            return false;
-        }
+
         if (userPass.getText().toString().trim().equals("")) {
             makeToast("Please enter your password");
             return false;
@@ -48,11 +46,12 @@ public class LoginScreenUser extends AppCompatActivity {
 
     public void initiateUserLogin(View view) {
         if(validateInputs()) {
-
+            firestoreHandler.loginUser(userId.getText().toString(), userPass.getText().toString());
         }
     }
 
     public void initiateUserSignup(View view) {
-
+        if (validateInputs())
+            firestoreHandler.createUser(userId.getText().toString(), userPass.getText().toString());
     }
 }

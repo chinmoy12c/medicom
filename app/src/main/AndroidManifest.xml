@@ -13,14 +13,14 @@
         <activity android:name=".LoginScreenUser"></activity>
         <activity android:name=".LoginScreenDoctor"></activity>
         <activity android:name=".LoginScreenMain">
-        </activity>
-        <activity android:name=".IssueDetailsScreen" />
-        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".IssueDetailsScreen" />
+        <activity android:name=".MainActivity">
         </activity>
     </application>
 

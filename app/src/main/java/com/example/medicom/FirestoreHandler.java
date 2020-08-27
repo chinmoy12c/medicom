@@ -1,6 +1,7 @@
 package com.example.medicom;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -10,29 +11,39 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FirestoreHandler {
 
     private Context context;
     private FirebaseFirestore db;
+    private FirebaseAuth firebaseAuth;
     ArrayList<String> fakeNews=new ArrayList<>();
 
 
     private static final String ISSUE_COLLECTION = "issues";
+    private static final String USERS_COLLECTION = "users";
 
     FirestoreHandler(Context context) {
         this.context = context;
         db = FirebaseFirestore.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     void showError(Exception e) {
         e.printStackTrace();
         Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    void showMessage(String msg) {
+        Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
 
     void setImage(ImageView imageView, String path) {
@@ -67,5 +78,61 @@ public class FirestoreHandler {
 
     public void fetchNeedHelp(RecyclerView needHelpList, BottomNavigationView bottomNavigationView) {
         needHelpList.setAdapter(new NeedHelpAdapter(context, bottomNavigationView));
+    }
+
+    public void createUser(final String userId, final String userPass) {
+        db.collection(USERS_COLLECTION).whereEqualTo("userId", userId)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            showMessage("User already exists with this id!");
+                            return;
+                        }
+
+                        firebaseAuth.createUserWithEmailAndPassword(userId, userPass)
+                                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                    @Override
+                                    public void onSuccess(AuthResult authResult) {
+                                        HashMap<String, Object> userData = new HashMap<>();
+                                        userData.put("userId", userId);
+                                        userData.put("userPass", userPass);
+                                        userData.put("userType", "PATIENT");
+                                        userData.put("consultAccess", false);
+                                        db.collection(USERS_COLLECTION).add(userData);
+                                        context.startActivity(new Intent(context, MainActivity.class));
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        showError(e);
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showError(e);
+                    }
+                });
+    }
+
+    public void loginUser(String userId, String userPass) {
+        firebaseAuth.signInWithEmailAndPassword(userId, userPass)
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        context.startActivity(new Intent(context, MainActivity.class));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showError(e);
+                    }
+                });
     }
 }
