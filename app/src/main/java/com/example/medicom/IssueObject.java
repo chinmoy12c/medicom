@@ -50,4 +50,8 @@ public class IssueObject implements Serializable {
     public Timestamp getTime() {
         return time;
     }
+
+    public void setOpen(boolean open) {
+        isOpen = open;
+    }
 }

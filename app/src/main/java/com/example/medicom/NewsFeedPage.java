@@ -47,7 +47,7 @@ public class NewsFeedPage extends Fragment {
 
         firestoreHandler = new FirestoreHandler(getContext());
         firestoreHandler.fetchNewsFeed(newsList, bottomNavigationView);
-        firestoreHandler.fetchNeedHelp(needHelpList);
+        firestoreHandler.fetchNeedHelp(needHelpList, bottomNavigationView);
 
         background.setOnClickListener(new View.OnClickListener() {
             @Override

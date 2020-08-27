@@ -33,7 +33,7 @@ public class MessagesFragment extends Fragment {
         sendMessage = rootView.findViewById(R.id.sendMessage);
         userMessage = rootView.findViewById(R.id.userMessage);
 
-        messagesToolbar.setTitle("Vishwaas Saxena");
+        messagesToolbar.setTitle("Anonymous");
         ((AppCompatActivity)getActivity()).setSupportActionBar(messagesToolbar);
 
         final MessagesAdapter adapter = new MessagesAdapter(getContext(), new ArrayList<String>());

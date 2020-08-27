@@ -8,12 +8,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class NeedHelpAdapter extends RecyclerView.Adapter<NeedHelpAdapter.MyViewHolder>{
 
     private Context context;
+    private BottomNavigationView bottomNavigationView;
 
-    public NeedHelpAdapter(Context context) {
+    public NeedHelpAdapter(Context context, BottomNavigationView bottomNavigationView) {
         this.context = context;
+        this.bottomNavigationView = bottomNavigationView;
     }
 
     @NonNull
@@ -37,6 +41,12 @@ public class NeedHelpAdapter extends RecyclerView.Adapter<NeedHelpAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.findViewById(R.id.helpUser).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    bottomNavigationView.findViewById(R.id.messagesPage).performClick();
+                }
+            });
         }
     }
 }
