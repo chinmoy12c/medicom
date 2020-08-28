@@ -22,8 +22,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static java.security.AccessController.getContext;
-
 public class FirestoreHandler {
 
     private Context context;
