@@ -13,18 +13,33 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Document;
+
+import java.util.ArrayList;
 
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyViewHolder>{
 
     private Context context;
-    private QuerySnapshot issuesList;
     private BottomNavigationView bottomNavigationView;
+    private ArrayList<IssueObject> issueList=new ArrayList<>();
 
     NewsFeedAdapter(Context context, QuerySnapshot issuesList, BottomNavigationView bottomNavigationView) {
         this.context = context;
-        this.issuesList = issuesList;
+        parseIssues(issuesList);
         this.bottomNavigationView = bottomNavigationView;
+    }
+
+    private void parseIssues(QuerySnapshot issuesList) {
+        for(DocumentSnapshot issue: issuesList){
+            issueList.add(new IssueObject(issue));
+        }
+    }
+    public void addContent(IssueObject issueObject){
+        issueList.add(0,issueObject);
+        this.notifyItemInserted(0);
     }
 
     @NonNull
@@ -42,7 +57,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
 
     @Override
     public int getItemCount() {
-        return issuesList.size();
+        return issueList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -69,12 +84,14 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
         }
 
         public void bind(int position) {
-            IssueObject currentIssue = new IssueObject(issuesList.getDocuments().get(position));
+            IssueObject currentIssue = issueList.get(position);
             new FirestoreHandler(context).setImage(postImage, currentIssue.getUserDp());
             postUsername.setText(currentIssue.getUserId());
             postTime.setText(DateUtils.getRelativeTimeSpanString(currentIssue.getTime().getSeconds() * 1000));
             postDescription.setText(currentIssue.getDescription());
             answersCount.setText(String.valueOf(currentIssue.getResponses().size()));
+
         }
+
     }
 }

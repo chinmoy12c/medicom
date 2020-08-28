@@ -6,6 +6,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class IssueObject implements Serializable {
 
@@ -17,12 +18,15 @@ public class IssueObject implements Serializable {
     private Timestamp time;
     private ArrayList<HashMap<String, Object>> responses;
 
+    public IssueObject() {
+    }
+
     IssueObject(DocumentSnapshot issue) {
         description = (String) issue.get("description");
         userId = (String) issue.get("userId");
         issueId = (String) issue.get("issueId");
         userDp = (String) issue.get("userDp");
-        isOpen = (boolean) issue.get("isOpen");
+        isOpen = (boolean) issue.get("open");
         time = (Timestamp) issue.get("time");
         responses = (ArrayList<HashMap<String, Object>>) issue.get("responses");
     }
@@ -35,6 +39,10 @@ public class IssueObject implements Serializable {
         return description;
     }
 
+    public boolean isOpen() {
+        return isOpen;
+    }
+
     public String getIssueId() {
         return issueId;
     }
@@ -45,6 +53,34 @@ public class IssueObject implements Serializable {
 
     public String getUserId() {
         return userId;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setIssueId(String issueId) {
+        this.issueId = issueId;
+    }
+
+    public void setUserDp(String userDp) {
+        this.userDp = userDp;
+    }
+
+    public void setisOpen(boolean open) {
+        isOpen = open;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
+    }
+
+    public void setResponses(ArrayList<HashMap<String, Object>> responses) {
+        this.responses = responses;
     }
 
     public Timestamp getTime() {

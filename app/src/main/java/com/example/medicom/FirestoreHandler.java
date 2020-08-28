@@ -2,6 +2,7 @@ package com.example.medicom;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -13,12 +14,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static java.security.AccessController.getContext;
 
 public class FirestoreHandler {
 
@@ -135,4 +139,24 @@ public class FirestoreHandler {
                     }
                 });
     }
+    public void sendIssueToFb(final IssueObject issueObject, final NewsFeedAdapter adapter){
+        db.collection(ISSUE_COLLECTION).add(issueObject).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                Log.d("Data","Added");
+                adapter.addContent(issueObject);
+
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("Data","Not Added");
+
+                    }
+                });
+
+    }
+
+
 }

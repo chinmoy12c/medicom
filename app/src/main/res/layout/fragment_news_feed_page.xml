@@ -55,7 +55,7 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="20dp"
         app:cardCornerRadius="50dp"
-        android:visibility="invisible">
+        android:visibility="visible">
 
     <ImageView
         android:id="@+id/addIssue"
