@@ -83,7 +83,7 @@ public class NewsFeedPage extends Fragment {
                 IssueObject issueObject=new IssueObject();
                 issueObject.setDescription(prob);
                 issueObject.setIssueId(UUID.randomUUID().toString());
-                issueObject.setOpen(true);
+                issueObject.setisOpen(true);
                 issueObject.setTime(Timestamp.now());
                 issueObject.setResponses(new ArrayList<HashMap<String, Object>>());
                 issueObject.setUserDp("https://us.123rf.com/450wm/nerthuz/nerthuz1608/nerthuz160800059/62345951-caduceus-medical-symbol.jpg?verhttps://us.123rf.com/450wm/nerthuz/nerthuz1608/nerthuz160800059/62345951-caduceus-medical-symbol.jpg?ver=6=6");
@@ -91,8 +91,9 @@ public class NewsFeedPage extends Fragment {
 
                 firestoreHandler.sendIssueToFb(issueObject, (NewsFeedAdapter) newsList.getAdapter());
 
-                Toast.makeText(getContext(),"This does", Toast.LENGTH_SHORT).show();
+
             }
+
         });
 
         return rootView;
