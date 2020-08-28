@@ -63,8 +63,8 @@ public class NewsFeedPage extends Fragment {
         background.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                background.setVisibility(View.VISIBLE);
-                popupCard.setVisibility(View.VISIBLE);
+                background.setVisibility(View.INVISIBLE);
+                popupCard.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -75,6 +75,7 @@ public class NewsFeedPage extends Fragment {
                 popupCard.setVisibility(View.VISIBLE);
             }
         });
+
         postProb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,9 +90,8 @@ public class NewsFeedPage extends Fragment {
                 issueObject.setUserDp("https://us.123rf.com/450wm/nerthuz/nerthuz1608/nerthuz160800059/62345951-caduceus-medical-symbol.jpg?verhttps://us.123rf.com/450wm/nerthuz/nerthuz1608/nerthuz160800059/62345951-caduceus-medical-symbol.jpg?ver=6=6");
                 issueObject.setUserId("chinmoy@gmail.com");
 
-                firestoreHandler.sendIssueToFb(issueObject, (NewsFeedAdapter) newsList.getAdapter());
-
-
+                firestoreHandler.sendIssueToFb(issueObject, newsList);
+                background.callOnClick();
             }
 
         });

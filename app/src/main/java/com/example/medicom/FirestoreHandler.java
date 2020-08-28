@@ -137,23 +137,20 @@ public class FirestoreHandler {
                     }
                 });
     }
-    public void sendIssueToFb(final IssueObject issueObject, final NewsFeedAdapter adapter){
+    public void sendIssueToFb(final IssueObject issueObject, final RecyclerView newsList){
         db.collection(ISSUE_COLLECTION).add(issueObject).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                Log.d("Data","Added");
-                adapter.addContent(issueObject);
-
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("Data","Not Added");
-
-                    }
-                });
-
+                NewsFeedAdapter newsFeedAdapter = (NewsFeedAdapter) newsList.getAdapter();
+                newsFeedAdapter.addContent(issueObject, newsList);
+            }})
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("Data","Not Added");
+                    showError(e);
+                }
+            });
     }
 
 

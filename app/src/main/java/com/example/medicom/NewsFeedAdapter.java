@@ -37,9 +37,10 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
             issueList.add(new IssueObject(issue));
         }
     }
-    public void addContent(IssueObject issueObject){
+    public void addContent(IssueObject issueObject, RecyclerView newsList){
         issueList.add(0,issueObject);
         this.notifyItemInserted(0);
+        newsList.scrollToPosition(0);
     }
 
     @NonNull
