@@ -17,15 +17,28 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
     private ArrayList<String> messages;
     private Context context;
+    private String chatDoc;
 
     MessagesAdapter(Context context, ArrayList<String> messages) {
         this.messages = messages;
         this.context = context;
     }
 
-    void addMessage(String message) {
-        messages.add(message);
-        notifyItemInserted(messages.size()-1);
+    void refreshMessages(ArrayList<String> messages) {
+        this.messages = messages;
+        this.notifyDataSetChanged();
+    }
+
+    void setChatDoc(String chatDoc) {
+        this.chatDoc = chatDoc;
+    }
+
+    String getChatDoc() {
+        return chatDoc;
+    }
+
+    public ArrayList<String> getMessages() {
+        return messages;
     }
 
     @Override
@@ -61,14 +74,16 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
 
         public void bind(int position) {
             String userMessage = messages.get(position);
-            if (userMessage.contains("user ")){
-                userMessage = userMessage.substring(userMessage.indexOf("user ")+5);
+            if (userMessage.startsWith("*(pat)*")){
+                userMessage = userMessage.substring(userMessage.indexOf("*(pat)*") + 7);
                 messageText.setBackground(context.getResources().getDrawable(R.drawable.message_back_white));
 
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)messageText.getLayoutParams();
                 params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 messageText.setLayoutParams(params);
             }
+            else
+                userMessage = userMessage.substring(userMessage.indexOf("*(doc)*") + 7);
 
             if (userMessage.contains("appointment")){
                 userMessage =  "appointment fixed " + userMessage.substring(userMessage.indexOf("appointment")+11);

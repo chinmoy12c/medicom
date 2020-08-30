@@ -7,15 +7,21 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
@@ -32,6 +38,10 @@ public class FirestoreHandler {
 
     private static final String ISSUE_COLLECTION = "issues";
     private static final String USERS_COLLECTION = "users";
+    private static final String MESSAGES_COLLECTION = "messages";
+    public static final String USER_TYPE = "*(doc)*";    //TODO:: change
+    public static final String DOC_ID = "*(doc)*";
+    public static final String PAT_ID = "*(pat)*";
 
     FirestoreHandler(Context context) {
         this.context = context;
@@ -52,12 +62,18 @@ public class FirestoreHandler {
         Picasso.get().load(path).into(imageView);
     }
 
-    void fetchNewsFeed(final RecyclerView newsList, final BottomNavigationView bottomNavigationView) {
+    String getUser() {
+        //return firebaseAuth.getCurrentUser().getEmail();
+        return "testdoc@gmail.com";
+        //TODO:: Change this
+    }
+
+    void fetchNewsFeed(final RecyclerView newsList) {
         db.collection(ISSUE_COLLECTION).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        newsList.setAdapter(new NewsFeedAdapter(context, queryDocumentSnapshots, bottomNavigationView));
+                        newsList.setAdapter(new NewsFeedAdapter(context, queryDocumentSnapshots, newsList));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -142,7 +158,7 @@ public class FirestoreHandler {
             @Override
             public void onSuccess(DocumentReference documentReference) {
                 NewsFeedAdapter newsFeedAdapter = (NewsFeedAdapter) newsList.getAdapter();
-                newsFeedAdapter.addContent(issueObject, newsList);
+                newsFeedAdapter.addContent(issueObject);
             }})
             .addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -154,4 +170,59 @@ public class FirestoreHandler {
     }
 
 
+    public void connectChat(final String doctor, final String pat, final MessagesAdapter messagesAdapter) {
+        final String chatId = doctor + "_" + pat;
+        db.collection(MESSAGES_COLLECTION).whereEqualTo("chatId", chatId)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (!value.isEmpty()) {
+                            ArrayList<String> messages = (ArrayList<String>) value.getDocuments().get(0).get("messages");
+                            messagesAdapter.refreshMessages(messages);
+                            messagesAdapter.setChatDoc(value.getDocuments().get(0).getId());
+                        }
+                        else {
+                            HashMap<String, Object> chatData = new HashMap<>();
+                            chatData.put("chatId", doctor + "_" + pat);
+                            chatData.put("messages", new ArrayList<String>());
+                            db.collection(MESSAGES_COLLECTION).add(chatData)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                        @Override
+                                        public void onSuccess(DocumentReference documentReference) {
+                                            messagesAdapter.setChatDoc(documentReference.getId());
+                                        }
+                                    });
+                        }
+                    }
+                });
+    }
+
+    public void sendMessage(String message, MessagesAdapter messagesAdapter) {
+        ArrayList<String> messages = messagesAdapter.getMessages();
+        messages.add(USER_TYPE + message);
+        db.collection(MESSAGES_COLLECTION).document(messagesAdapter.getChatDoc())
+                .update("messages", messages);
+    }
+
+    public void getChats(final RecyclerView inboxRecycler) {
+        String currentUser = getUser();
+        db.collection(MESSAGES_COLLECTION)
+                .whereGreaterThanOrEqualTo("chatId", currentUser)
+        .get()
+        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                Log.d("Size", String.valueOf(queryDocumentSnapshots.size()));
+                InboxAdapter inboxAdapter = new InboxAdapter(context, queryDocumentSnapshots);
+                inboxRecycler.setLayoutManager(new LinearLayoutManager(context));
+                inboxRecycler.setAdapter(inboxAdapter);
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                showError(e);
+            }
+        });
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.medicom;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,24 +13,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Document;
 
 import java.util.ArrayList;
 
 public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyViewHolder>{
 
     private Context context;
-    private BottomNavigationView bottomNavigationView;
     private ArrayList<IssueObject> issueList=new ArrayList<>();
+    private FirestoreHandler firestoreHandler;
+    private RecyclerView newsListRecycler;
 
-    NewsFeedAdapter(Context context, QuerySnapshot issuesList, BottomNavigationView bottomNavigationView) {
+    NewsFeedAdapter(Context context, QuerySnapshot issuesList, RecyclerView newsListRecycler) {
         this.context = context;
+        this.newsListRecycler = newsListRecycler;
         parseIssues(issuesList);
-        this.bottomNavigationView = bottomNavigationView;
+        firestoreHandler = new FirestoreHandler(context);
     }
 
     private void parseIssues(QuerySnapshot issuesList) {
@@ -37,10 +37,10 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
             issueList.add(new IssueObject(issue));
         }
     }
-    public void addContent(IssueObject issueObject, RecyclerView newsList){
+    public void addContent(IssueObject issueObject){
         issueList.add(0,issueObject);
         this.notifyItemInserted(0);
-        newsList.scrollToPosition(0);
+        newsListRecycler.scrollToPosition(0);
     }
 
     @NonNull
@@ -76,22 +76,25 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
             postDescription = itemView.findViewById(R.id.postDescription);
             answersCount = itemView.findViewById(R.id.answersCount);
             consultPrivate = itemView.findViewById(R.id.consultPrivate);
-            consultPrivate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    bottomNavigationView.findViewById(R.id.messagesPage).performClick();
-                }
-            });
         }
 
         public void bind(int position) {
-            IssueObject currentIssue = issueList.get(position);
+            final IssueObject currentIssue = issueList.get(position);
             new FirestoreHandler(context).setImage(postImage, currentIssue.getUserDp());
             postUsername.setText(currentIssue.getUserId());
             postTime.setText(DateUtils.getRelativeTimeSpanString(currentIssue.getTime().getSeconds() * 1000));
             postDescription.setText(currentIssue.getDescription());
             answersCount.setText(String.valueOf(currentIssue.getResponses().size()));
 
+            consultPrivate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent chatIntent = new Intent(context, ChatScreen.class);
+                    chatIntent.putExtra("doc", firestoreHandler.getUser());
+                    chatIntent.putExtra("pat", currentIssue.getUserId());
+                    context.startActivity(chatIntent);
+                }
+            });
         }
 
     }

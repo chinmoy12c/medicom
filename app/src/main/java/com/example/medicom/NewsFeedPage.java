@@ -57,7 +57,7 @@ public class NewsFeedPage extends Fragment {
         needHelpList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         firestoreHandler = new FirestoreHandler(getContext());
-        firestoreHandler.fetchNewsFeed(newsList, bottomNavigationView);
+        firestoreHandler.fetchNewsFeed(newsList);
         firestoreHandler.fetchNeedHelp(needHelpList, bottomNavigationView);
 
         background.setOnClickListener(new View.OnClickListener() {
