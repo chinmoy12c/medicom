@@ -3,7 +3,9 @@ package com.example.medicom;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,17 +18,21 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.UUID;
 
 public class FirestoreHandler {
 
@@ -39,6 +45,7 @@ public class FirestoreHandler {
     private static final String ISSUE_COLLECTION = "issues";
     private static final String USERS_COLLECTION = "users";
     private static final String MESSAGES_COLLECTION = "messages";
+    private static final String STRESS_SIGNALS = "stressSignals";
     public static final String USER_TYPE = "*(doc)*";    //TODO:: change
     public static final String DOC_ID = "*(doc)*";
     public static final String PAT_ID = "*(pat)*";
@@ -65,6 +72,7 @@ public class FirestoreHandler {
     String getUser() {
         //return firebaseAuth.getCurrentUser().getEmail();
         return "testdoc@gmail.com";
+//        return "chinmoy12c@gmail.com";
         //TODO:: Change this
     }
 
@@ -94,8 +102,20 @@ public class FirestoreHandler {
         newsList.setAdapter(new FakeNewsAdapter(context,fakeNews));
     }
 
-    public void fetchNeedHelp(RecyclerView needHelpList, BottomNavigationView bottomNavigationView) {
-        needHelpList.setAdapter(new NeedHelpAdapter(context, bottomNavigationView));
+    public void fetchNeedHelp(final RecyclerView needHelpList) {
+        db.collection(STRESS_SIGNALS).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        needHelpList.setAdapter(new NeedHelpAdapter(context, queryDocumentSnapshots));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showError(e);
+                    }
+                });
     }
 
     public void createUser(final String userId, final String userPass) {
@@ -170,9 +190,9 @@ public class FirestoreHandler {
     }
 
 
-    public void connectChat(final String doctor, final String pat, final MessagesAdapter messagesAdapter) {
+    public void connectChat(final String doctor, final String pat, final MessagesAdapter messagesAdapter, final String type, final String maskedUser) {
         final String chatId = doctor + "_" + pat;
-        db.collection(MESSAGES_COLLECTION).whereEqualTo("chatId", chatId)
+        db.collection(MESSAGES_COLLECTION).whereEqualTo("chatIdDoc", chatId)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -183,8 +203,11 @@ public class FirestoreHandler {
                         }
                         else {
                             HashMap<String, Object> chatData = new HashMap<>();
-                            chatData.put("chatId", doctor + "_" + pat);
+                            chatData.put("chatIdDoc", doctor + "_" + pat);
+                            chatData.put("chatIdPat", pat + "_" + doctor);
                             chatData.put("messages", new ArrayList<String>());
+                            chatData.put("type", type);
+                            chatData.put("maskedUser", maskedUser);
                             db.collection(MESSAGES_COLLECTION).add(chatData)
                                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                         @Override
@@ -206,9 +229,17 @@ public class FirestoreHandler {
 
     public void getChats(final RecyclerView inboxRecycler) {
         String currentUser = getUser();
-        db.collection(MESSAGES_COLLECTION)
-                .whereGreaterThanOrEqualTo("chatId", currentUser)
-        .get()
+        Query inboxQuery;
+        if (FirestoreHandler.USER_TYPE == FirestoreHandler.PAT_ID)
+            inboxQuery = db.collection(MESSAGES_COLLECTION)
+                    .whereGreaterThanOrEqualTo("chatIdPat", getUser())
+                    .whereLessThanOrEqualTo("chatIdPat", getUser() + "a");
+        else
+            inboxQuery = db.collection(MESSAGES_COLLECTION)
+                    .whereGreaterThanOrEqualTo("chatIdDoc", getUser())
+                    .whereLessThanOrEqualTo("chatIdDoc", getUser() + "a");
+
+        inboxQuery.get()
         .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -216,6 +247,7 @@ public class FirestoreHandler {
                 InboxAdapter inboxAdapter = new InboxAdapter(context, queryDocumentSnapshots);
                 inboxRecycler.setLayoutManager(new LinearLayoutManager(context));
                 inboxRecycler.setAdapter(inboxAdapter);
+                getAnonymous(inboxAdapter);
             }
         })
         .addOnFailureListener(new OnFailureListener() {
@@ -224,5 +256,70 @@ public class FirestoreHandler {
                 showError(e);
             }
         });
+    }
+
+    private void getAnonymous(final InboxAdapter inboxAdapter) {
+        db.collection(MESSAGES_COLLECTION)
+                .whereEqualTo("maskedUser", getUser())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        Log.d("SIZE", String.valueOf(queryDocumentSnapshots.size()));
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (DocumentSnapshot anonymousDoc : queryDocumentSnapshots)
+                                inboxAdapter.addChat(anonymousDoc);
+                            inboxAdapter.notifyDataSetChanged();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showError(e);
+                    }
+                });
+    }
+
+    public void initiateStressSignal(final RelativeLayout sendSignalView, final RelativeLayout signalSentView) {
+        HashMap<String, Object> signalData = new HashMap<>();
+        signalData.put("initiator", getUser());
+        signalData.put("user", "user" + UUID.randomUUID().toString());
+        signalData.put("time", Timestamp.now());
+
+        db.collection(STRESS_SIGNALS).add(signalData)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        sendSignalView.setVisibility(View.INVISIBLE);
+                        signalSentView.setVisibility(View.VISIBLE);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showError(e);
+                    }
+                });
+    }
+
+    public void checkStressSignal(final RelativeLayout sendSignalView, final RelativeLayout signalSentView) {
+        db.collection(STRESS_SIGNALS).whereEqualTo("initiator", getUser())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (queryDocumentSnapshots.isEmpty())
+                            sendSignalView.setVisibility(View.VISIBLE);
+                        else
+                            signalSentView.setVisibility(View.VISIBLE);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showError(e);
+                    }
+                });
     }
 }

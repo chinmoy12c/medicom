@@ -35,6 +35,13 @@ public class ChatScreen extends AppCompatActivity {
         Intent currentIntent = getIntent();
         String pat = (String) currentIntent.getExtras().get("pat");
         String doc = (String) currentIntent.getExtras().get("doc");
+        String type = (String) currentIntent.getExtras().get("type");
+
+        String maskedUser = "";
+        if (type.equals("ANON")) {
+            maskedUser = pat;
+            pat = (String) currentIntent.getExtras().get("maskedUser");
+        }
 
         if (FirestoreHandler.USER_TYPE == FirestoreHandler.PAT_ID)
             messagesToolbar.setTitle(doc);
@@ -47,7 +54,7 @@ public class ChatScreen extends AppCompatActivity {
         messagesRecycler.setLayoutManager(new LinearLayoutManager(this));
         messagesRecycler.setAdapter(messagesAdapter);
 
-        firestoreHandler.connectChat(doc, pat, messagesAdapter);
+        firestoreHandler.connectChat(doc, pat, messagesAdapter, type, maskedUser);
 
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -92,6 +92,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
                     Intent chatIntent = new Intent(context, ChatScreen.class);
                     chatIntent.putExtra("doc", firestoreHandler.getUser());
                     chatIntent.putExtra("pat", currentIssue.getUserId());
+                    chatIntent.putExtra("type", "NORM");
                     context.startActivity(chatIntent);
                 }
             });

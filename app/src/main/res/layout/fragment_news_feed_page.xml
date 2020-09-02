@@ -30,8 +30,68 @@
         android:id="@+id/needHelpContainer"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_below="@+id/needHelpBanner"/>
+        android:layout_below="@+id/needHelpBanner"
+        android:visibility="invisible"
+        />
 
+    <RelativeLayout
+        android:id="@+id/sendSignalView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@id/needHelpBanner"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/helpSymbol"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/help"/>
+
+        <Button
+            android:id="@+id/sendStressSignal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/helpSymbol"
+            android:layout_margin="10dp"
+            android:background="#3636A3"
+            android:text="Send Stress Signal"
+            android:textColor="#ffffff"
+            android:padding="5dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/signalSentView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@id/needHelpBanner"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/signalSent"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/tick"/>
+
+        <TextView
+            android:id="@+id/signalSentBanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/signalSent"
+            android:layout_margin="10dp"
+            android:text="Stress signal on"
+            android:textSize="20sp"
+            android:padding="5dp"
+            />
+
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"

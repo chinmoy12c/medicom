@@ -1,23 +1,29 @@
 package com.example.medicom;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class NeedHelpAdapter extends RecyclerView.Adapter<NeedHelpAdapter.MyViewHolder>{
 
     private Context context;
-    private BottomNavigationView bottomNavigationView;
+    private QuerySnapshot signals;
+    private FirestoreHandler firestoreHandler;
 
-    public NeedHelpAdapter(Context context, BottomNavigationView bottomNavigationView) {
+    public NeedHelpAdapter(Context context, QuerySnapshot queryDocumentSnapshots) {
         this.context = context;
-        this.bottomNavigationView = bottomNavigationView;
+        this.signals = queryDocumentSnapshots;
+        firestoreHandler = new FirestoreHandler(context);
     }
 
     @NonNull
@@ -30,21 +36,34 @@ public class NeedHelpAdapter extends RecyclerView.Adapter<NeedHelpAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
+        holder.bind(position);
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return signals.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        private Button helpUser;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemView.findViewById(R.id.helpUser).setOnClickListener(new View.OnClickListener() {
+            helpUser = itemView.findViewById(R.id.helpUser);
+        }
+
+        public void bind(int position) {
+            final DocumentSnapshot currentSignal = signals.getDocuments().get(position);
+            helpUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    bottomNavigationView.findViewById(R.id.messagesPage).performClick();
+                    Intent chatIntent = new Intent(context, ChatScreen.class);
+                    chatIntent.putExtra("doc", firestoreHandler.getUser());
+                    chatIntent.putExtra("pat", (String) currentSignal.get("initiator"));
+                    chatIntent.putExtra("type", "ANON");
+                    chatIntent.putExtra("maskedUser", (String) currentSignal.get("user"));
+                    context.startActivity(chatIntent);
                 }
             });
         }

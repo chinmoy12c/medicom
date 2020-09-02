@@ -2,6 +2,7 @@ package com.example.medicom;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.List;
+
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder> {
 
     private Context context;
-    private QuerySnapshot chats;
+    private List<DocumentSnapshot> chats;
 
     InboxAdapter(Context context, QuerySnapshot chats) {
         this.context = context;
-        this.chats = chats;
+        this.chats = chats.getDocuments();
     }
 
     @NonNull
@@ -42,6 +45,12 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
         return chats.size();
     }
 
+    public void addChat(DocumentSnapshot anonymousDoc) {
+        Log.d("Size", String.valueOf(chats.size()));
+        chats.add(anonymousDoc);
+        Log.d("Size", String.valueOf(chats.size()));
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView userName;
@@ -54,15 +63,15 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
         }
 
         public void bind(int position) {
-            DocumentSnapshot currentChat = chats.getDocuments().get(position);
-            String userId = (String) currentChat.get("chatId");
+            DocumentSnapshot currentChat = chats.get(position);
+            String userId = (String) currentChat.get("chatIdDoc");
             final String docId = userId.substring(0, userId.indexOf("_" ));
             final String patId = userId.substring(userId.indexOf("_") + 1);
 
             if (FirestoreHandler.USER_TYPE == FirestoreHandler.PAT_ID)
-                userId = userId.substring(0, userId.indexOf("_" ));
+                userId = docId;
             else
-                userId = userId.substring(userId.indexOf("_") + 1);
+                userId = patId;
 
             userName.setText(userId);
 
@@ -72,6 +81,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
                     Intent chatIntent = new Intent(context, ChatScreen.class);
                     chatIntent.putExtra("doc", docId);
                     chatIntent.putExtra("pat", patId);
+                    chatIntent.putExtra("type", "NORM");
                     context.startActivity(chatIntent);
                 }
             });

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -31,10 +32,11 @@ public class NewsFeedPage extends Fragment {
     private FirestoreHandler firestoreHandler;
     private CardView popupCard;
     private View background;
-    private Button postProb;
+    private Button postProb, sendStressSignal;
     private EditText probDesc;
     private ImageView addIssue;
     private BottomNavigationView bottomNavigationView;
+    private RelativeLayout sendSignalView, signalSentView;
 
     public NewsFeedPage(BottomNavigationView bottomNavigationView) {
         this.bottomNavigationView = bottomNavigationView;
@@ -52,13 +54,23 @@ public class NewsFeedPage extends Fragment {
         probDesc=rootView.findViewById(R.id.problemDescription);
         background = rootView.findViewById(R.id.backgroundView);
         addIssue = rootView.findViewById(R.id.addIssue);
+        sendStressSignal = rootView.findViewById(R.id.sendStressSignal);
+        sendSignalView = rootView.findViewById(R.id.sendSignalView);
+        signalSentView = rootView.findViewById(R.id.signalSentView);
 
         newsList.setLayoutManager(new LinearLayoutManager(getContext()));
-        needHelpList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
         firestoreHandler = new FirestoreHandler(getContext());
         firestoreHandler.fetchNewsFeed(newsList);
-        firestoreHandler.fetchNeedHelp(needHelpList, bottomNavigationView);
+
+        if (FirestoreHandler.USER_TYPE == FirestoreHandler.PAT_ID) {
+            firestoreHandler.checkStressSignal(sendSignalView, signalSentView);
+        }
+        else {
+            needHelpList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+            firestoreHandler.fetchNeedHelp(needHelpList);
+            needHelpList.setVisibility(View.VISIBLE);
+        }
 
         background.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,23 +91,34 @@ public class NewsFeedPage extends Fragment {
         postProb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String prob;
-                prob=probDesc.getText().toString();
-                IssueObject issueObject=new IssueObject();
-                issueObject.setDescription(prob);
-                issueObject.setIssueId(UUID.randomUUID().toString());
-                issueObject.setisOpen(true);
-                issueObject.setTime(Timestamp.now());
-                issueObject.setResponses(new ArrayList<HashMap<String, Object>>());
-                issueObject.setUserDp("https://us.123rf.com/450wm/nerthuz/nerthuz1608/nerthuz160800059/62345951-caduceus-medical-symbol.jpg?verhttps://us.123rf.com/450wm/nerthuz/nerthuz1608/nerthuz160800059/62345951-caduceus-medical-symbol.jpg?ver=6=6");
-                issueObject.setUserId("chinmoy@gmail.com");
-
-                firestoreHandler.sendIssueToFb(issueObject, newsList);
-                background.callOnClick();
+                initiatePost();
             }
 
         });
 
+        sendStressSignal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firestoreHandler.initiateStressSignal(sendSignalView, signalSentView);
+            }
+        });
+
         return rootView;
+    }
+
+    private void initiatePost() {
+        String prob;
+        prob=probDesc.getText().toString();
+        IssueObject issueObject=new IssueObject();
+        issueObject.setDescription(prob);
+        issueObject.setIssueId(UUID.randomUUID().toString());
+        issueObject.setisOpen(true);
+        issueObject.setTime(Timestamp.now());
+        issueObject.setResponses(new ArrayList<HashMap<String, Object>>());
+        issueObject.setUserDp("https://us.123rf.com/450wm/nerthuz/nerthuz1608/nerthuz160800059/62345951-caduceus-medical-symbol.jpg?verhttps://us.123rf.com/450wm/nerthuz/nerthuz1608/nerthuz160800059/62345951-caduceus-medical-symbol.jpg?ver=6=6");
+        issueObject.setUserId(firestoreHandler.getUser());
+
+        firestoreHandler.sendIssueToFb(issueObject, newsList);
+        background.callOnClick();
     }
 }
