@@ -19,12 +19,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".VideoConference"></activity>
-        <activity android:name=".ChatScreen"></activity>
+        <activity android:name=".IssueResponsesScreen"></activity>
+        <activity android:name=".VideoConference" />
+        <activity android:name=".ChatScreen" />
         <activity android:name=".SearchNewsResults" />
         <activity android:name=".LoginScreenUser" />
         <activity android:name=".LoginScreenDoctor" />
-        <activity android:name=".LoginScreenMain"></activity>
+        <activity android:name=".LoginScreenMain" />
         <activity android:name=".IssueDetailsScreen" />
         <activity android:name=".MainActivity">
             <intent-filter>

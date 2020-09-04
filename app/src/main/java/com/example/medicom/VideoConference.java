@@ -1,30 +1,43 @@
 package com.example.medicom;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.vidyo.VidyoClient.Connector.Connector;
 import com.vidyo.VidyoClient.Connector.ConnectorPkg;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class VideoConference extends AppCompatActivity implements Connector.IConnect {
 
     private FrameLayout videoView;
+    private TextView messageBox;
     private Connector videoConnector;
-    private final String accessToken = "cHJvdmlzaW9uAERlbW9Vc2VyQDllYmIwYi52aWR5by5pbwA2Mzc2NjM4NDM0MAAAMjI2YjUwNDIwMGZiNzBiN2Q5MTg4NmMyYmU4ODQwMzljNTA5NjM3ZDNhZTA4YjA2OGJiMmEwOTExODdkNjkyMmI2YTlhMmUzYjgwZTU4NmVlNWY5MzVkMTNhZGNjZDZh";
+    private ImageView joinCall;
+    private Activity currentActivity = this;
+    private boolean isConnected = false;
+    private final String accessToken = "cHJvdmlzaW9uAERlbW9Vc2VyQDllYmIwYi52aWR5by5pbwA2Mzc2NjQ1MzQ2MQAANmMwOGFiMWYwNDg2NTFmMTA0YTcyZWJhYzY1NWMzNmI0ZjA2NjRhMTk5YzJjMWJiZWRiZmI3N2VlZTUyZTZmZmMzM2UyNWYyYjA5ZDgxMmYwNDkwZTNlYjY2YjA1ZjI1";
     private ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener = null;
 
     private static final String[] mPermissions = new String[] {
@@ -41,11 +54,10 @@ public class VideoConference extends AppCompatActivity implements Connector.ICon
         setContentView(R.layout.activity_video_conference);
 
         videoView = findViewById(R.id.videoView);
-        Log.d("VideoTEST", "Failed");
-
+        messageBox = findViewById(R.id.messageBox);
+        joinCall = findViewById(R.id.connectButton);
 
         ConnectorPkg.setApplicationUIContext(this);
-        Log.d("VideoTEST", "HERE");
         if (ConnectorPkg.initialize()) {
             videoConnector = new Connector(
                     videoView,
@@ -76,10 +88,35 @@ public class VideoConference extends AppCompatActivity implements Connector.ICon
             }
 
             videoConnector.showViewAt(videoView, 0, 0, videoView.getWidth(), videoView.getHeight());
-            Log.d("VideoTEST", "success");
+            showMsg("Cam connected");
         }
         else {
-            Log.d("VideoTEST", "Failed");
+            showMsg("Cam connection failed");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Release device resources
+        if (videoConnector != null) {
+            videoConnector.selectLocalCamera(null);
+            videoConnector.selectLocalMicrophone(null);
+            videoConnector.selectLocalSpeaker(null);
+        }
+
+        // Connector will be destructed upon garbage collection.
+        videoConnector = null;
+
+        ConnectorPkg.setApplicationUIContext(null);
+
+        // Uninitialize the VidyoClient library - this should be done once in the lifetime of the application.
+        ConnectorPkg.uninitialize();
+
+        // Remove the global layout listener on the video frame.
+        if (mOnGlobalLayoutListener != null) {
+            videoView.getViewTreeObserver().removeOnGlobalLayoutListener(mOnGlobalLayoutListener);
         }
     }
 
@@ -97,7 +134,7 @@ public class VideoConference extends AppCompatActivity implements Connector.ICon
                 }
             });
         } else {
-            Log.d("ERROR", "ERROR in startVideoViewSizeListener! Video will not be rendered.");
+            showMsg("Preview failed");
         }
     }
 
@@ -116,30 +153,66 @@ public class VideoConference extends AppCompatActivity implements Connector.ICon
     }
 
     public void connectRoom(View view) {
-        videoConnector.connect(
-                "prod.vidyo.io",
-                accessToken,
-                "DemoUser",
-                "DemoRoom",
-                this);
+        if (isConnected) {
+            showMsg("Disconnecting....");
+            videoConnector.disconnect();
+        }
+        else {
+            showMsg("Connecting....");
+            videoConnector.connect(
+                    "prod.vidyo.io",
+                    accessToken,
+                    "DemoUser",
+                    "DemoRoom",
+                    this);
+        }
+
     }
 
-    void showMsg(String msg) {
-        Log.d("INFO MSG:", msg);
+    void showMsg(final String msg) {
+        currentActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messageBox.setText(msg);
+                messageBox.setVisibility(View.VISIBLE);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        messageBox.setVisibility(View.INVISIBLE);
+                    }
+                }, 2000);
+            }
+        });
+    }
+
+    void changeUIState() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (isConnected)
+                    joinCall.setImageResource(R.drawable.disconnect);
+                else
+                    joinCall.setImageResource(R.drawable.phone);
+            }
+        });
     }
 
     @Override
     public void onSuccess() {
-        showMsg("Success");
+        showMsg("Connected to room");
+        changeUIState();
+        isConnected = !isConnected;
     }
 
     @Override
     public void onFailure(Connector.ConnectorFailReason connectorFailReason) {
-        showMsg(connectorFailReason.name());
+        showMsg("Connection failed");
     }
 
     @Override
     public void onDisconnected(Connector.ConnectorDisconnectReason connectorDisconnectReason) {
-        showMsg(connectorDisconnectReason.name());
+        showMsg("Conference disconnected");
+        changeUIState();
+        isConnected = !isConnected;
     }
 }

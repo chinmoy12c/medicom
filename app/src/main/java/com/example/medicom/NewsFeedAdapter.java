@@ -65,7 +65,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
 
         private ImageView postImage;
         private TextView postUsername, postTime, postDescription, answersCount;
-        private Button consultPrivate;
+        private Button consultPrivate, consultPublic;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,6 +76,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
             postDescription = itemView.findViewById(R.id.postDescription);
             answersCount = itemView.findViewById(R.id.answersCount);
             consultPrivate = itemView.findViewById(R.id.consultPrivate);
+            consultPublic = itemView.findViewById(R.id.consultPublic);
         }
 
         public void bind(int position) {
@@ -94,6 +95,15 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
                     chatIntent.putExtra("pat", currentIssue.getUserId());
                     chatIntent.putExtra("type", "NORM");
                     context.startActivity(chatIntent);
+                }
+            });
+
+            consultPublic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent responseIntent = new Intent(context, IssueResponsesScreen.class);
+                    responseIntent.putExtra("responses", currentIssue.getResponses());
+                    context.startActivity(responseIntent);
                 }
             });
         }

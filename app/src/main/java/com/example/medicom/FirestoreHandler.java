@@ -284,7 +284,7 @@ public class FirestoreHandler {
     public void initiateStressSignal(final RelativeLayout sendSignalView, final RelativeLayout signalSentView) {
         HashMap<String, Object> signalData = new HashMap<>();
         signalData.put("initiator", getUser());
-        signalData.put("user", "user" + UUID.randomUUID().toString());
+        signalData.put("user", "Anonymous");
         signalData.put("time", Timestamp.now());
 
         db.collection(STRESS_SIGNALS).add(signalData)
