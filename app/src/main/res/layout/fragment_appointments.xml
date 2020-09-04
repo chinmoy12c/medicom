@@ -64,6 +64,7 @@
                 android:src="@drawable/user_doctor" />
 
             <Button
+                android:id="@+id/joinCall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
