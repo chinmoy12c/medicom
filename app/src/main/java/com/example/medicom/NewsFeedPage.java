@@ -63,7 +63,7 @@ public class NewsFeedPage extends Fragment {
         firestoreHandler = new FirestoreHandler(getContext());
         firestoreHandler.fetchNewsFeed(newsList);
 
-        if (FirestoreHandler.USER_TYPE == FirestoreHandler.PAT_ID) {
+        if (FirestoreHandler.USER_TYPE.equals(FirestoreHandler.PAT_ID)) {
             firestoreHandler.checkStressSignal(sendSignalView, signalSentView);
         }
         else {

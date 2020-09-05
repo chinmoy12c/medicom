@@ -68,7 +68,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
             final String docId = userId.substring(0, userId.indexOf("_" ));
             final String patId = userId.substring(userId.indexOf("_") + 1);
 
-            if (FirestoreHandler.USER_TYPE == FirestoreHandler.PAT_ID)
+            if (FirestoreHandler.USER_TYPE.equals(FirestoreHandler.PAT_ID))
                 userId = docId;
             else
                 userId = patId;

@@ -43,7 +43,7 @@ public class ChatScreen extends AppCompatActivity {
             pat = (String) currentIntent.getExtras().get("maskedUser");
         }
 
-        if (FirestoreHandler.USER_TYPE == FirestoreHandler.PAT_ID)
+        if (FirestoreHandler.USER_TYPE.equals(FirestoreHandler.PAT_ID))
             messagesToolbar.setTitle(doc);
         else
             messagesToolbar.setTitle(pat);

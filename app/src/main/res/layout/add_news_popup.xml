@@ -43,7 +43,7 @@
             android:gravity="top"
             android:textSize="20sp"
             android:padding="10dp"
-            android:text="Amitabh bachhan released covid negative and released from hospital."/>
+            android:text="Amitabh Bachchan covid negative and released from hospital."/>
 
         <Button
             android:id="@+id/search_bttn"

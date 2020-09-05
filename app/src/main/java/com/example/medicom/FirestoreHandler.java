@@ -46,7 +46,7 @@ public class FirestoreHandler {
     private static final String USERS_COLLECTION = "users";
     private static final String MESSAGES_COLLECTION = "messages";
     private static final String STRESS_SIGNALS = "stressSignals";
-    public static final String USER_TYPE = "*(doc)*";    //TODO:: change
+    public static String USER_TYPE = "";    //TODO:: change
     public static final String DOC_ID = "*(doc)*";
     public static final String PAT_ID = "*(pat)*";
 
@@ -70,8 +70,8 @@ public class FirestoreHandler {
     }
 
     String getUser() {
-        //return firebaseAuth.getCurrentUser().getEmail();
-        return "testdoc@gmail.com";
+        return firebaseAuth.getCurrentUser().getEmail();
+//        return "testdoc@gmail.com";
 //        return "chinmoy12c@gmail.com";
         //TODO:: Change this
     }
@@ -139,6 +139,7 @@ public class FirestoreHandler {
                                         userData.put("userType", "PATIENT");
                                         userData.put("consultAccess", false);
                                         db.collection(USERS_COLLECTION).add(userData);
+                                        FirestoreHandler.USER_TYPE = FirestoreHandler.PAT_ID;
                                         context.startActivity(new Intent(context, MainActivity.class));
                                     }
                                 })
@@ -163,6 +164,7 @@ public class FirestoreHandler {
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
+                        FirestoreHandler.USER_TYPE = FirestoreHandler.PAT_ID;
                         context.startActivity(new Intent(context, MainActivity.class));
                     }
                 })
@@ -230,7 +232,7 @@ public class FirestoreHandler {
     public void getChats(final RecyclerView inboxRecycler) {
         String currentUser = getUser();
         Query inboxQuery;
-        if (FirestoreHandler.USER_TYPE == FirestoreHandler.PAT_ID)
+        if (FirestoreHandler.USER_TYPE.equals(FirestoreHandler.PAT_ID))
             inboxQuery = db.collection(MESSAGES_COLLECTION)
                     .whereGreaterThanOrEqualTo("chatIdPat", getUser())
                     .whereLessThanOrEqualTo("chatIdPat", getUser() + "a");
@@ -338,5 +340,22 @@ public class FirestoreHandler {
                 showError(e);
             }
         });
+    }
+
+    public void loginDoctor(String doctorId, String doctorPass) {
+        firebaseAuth.signInWithEmailAndPassword(doctorId, doctorPass)
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        FirestoreHandler.USER_TYPE = FirestoreHandler.DOC_ID;
+                        context.startActivity(new Intent(context, MainActivity.class));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showError(e);
+                    }
+                });
     }
 }

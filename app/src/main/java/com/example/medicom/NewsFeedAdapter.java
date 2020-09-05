@@ -79,6 +79,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
             answersCount = itemView.findViewById(R.id.answersCount);
             consultPrivate = itemView.findViewById(R.id.consultPrivate);
             consultPublic = itemView.findViewById(R.id.consultPublic);
+
+            if (FirestoreHandler.USER_TYPE.equals(FirestoreHandler.PAT_ID)) {
+                consultPublic.setVisibility(View.GONE);
+                consultPrivate.setVisibility(View.GONE);
+            }
+
         }
 
         public void bind(final int position) {
