@@ -322,4 +322,21 @@ public class FirestoreHandler {
                     }
                 });
     }
+
+    public void addResponse(final ArrayList<HashMap<String, Object>> responseData, String docId, final ResponseScreenAdapter responseScreenAdapter) {
+        db.collection(ISSUE_COLLECTION).document(docId)
+                .update("responses", responseData)
+        .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                responseScreenAdapter.updateResponses(responseData);
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                showError(e);
+            }
+        });
+    }
 }

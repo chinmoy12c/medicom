@@ -22,6 +22,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
 
     private Context context;
     private ArrayList<IssueObject> issueList=new ArrayList<>();
+    private ArrayList<String> docIds = new ArrayList<>();
     private FirestoreHandler firestoreHandler;
     private RecyclerView newsListRecycler;
 
@@ -35,6 +36,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
     private void parseIssues(QuerySnapshot issuesList) {
         for(DocumentSnapshot issue: issuesList){
             issueList.add(new IssueObject(issue));
+            docIds.add(issue.getId());
         }
     }
     public void addContent(IssueObject issueObject){
@@ -79,7 +81,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
             consultPublic = itemView.findViewById(R.id.consultPublic);
         }
 
-        public void bind(int position) {
+        public void bind(final int position) {
             final IssueObject currentIssue = issueList.get(position);
             new FirestoreHandler(context).setImage(postImage, currentIssue.getUserDp());
             postUsername.setText(currentIssue.getUserId());
@@ -103,6 +105,8 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
                 public void onClick(View v) {
                     Intent responseIntent = new Intent(context, IssueResponsesScreen.class);
                     responseIntent.putExtra("responses", currentIssue.getResponses());
+                    responseIntent.putExtra("docId", docIds.get(position));
+
                     context.startActivity(responseIntent);
                 }
             });

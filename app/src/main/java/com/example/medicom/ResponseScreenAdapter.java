@@ -24,6 +24,11 @@ public class ResponseScreenAdapter extends RecyclerView.Adapter<ResponseScreenAd
         this.responses = responses;
     }
 
+    public void updateResponses(ArrayList<HashMap<String, Object>> responses) {
+        this.responses = responses;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
