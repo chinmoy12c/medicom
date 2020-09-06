@@ -32,7 +32,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 
 public class FirestoreHandler {
 
@@ -46,6 +45,7 @@ public class FirestoreHandler {
     private static final String USERS_COLLECTION = "users";
     private static final String MESSAGES_COLLECTION = "messages";
     private static final String STRESS_SIGNALS = "stressSignals";
+    private static final String ACCESS_TOKEN = "accessTokens";
     public static String USER_TYPE = "";    //TODO:: change
     public static final String DOC_ID = "*(doc)*";
     public static final String PAT_ID = "*(pat)*";
@@ -355,6 +355,28 @@ public class FirestoreHandler {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         showError(e);
+                    }
+                });
+    }
+
+    public void getAccessToken(final VideoConference videoConference) {
+        db.collection(ACCESS_TOKEN).document("defaultAccessToken")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        videoConference.setAccessToken((String) documentSnapshot.get("accessToken"));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull final Exception e) {
+                        videoConference.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showError(e);
+                            }
+                        });
                     }
                 });
     }

@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.Timestamp;
 
@@ -24,6 +25,7 @@ public class IssueResponsesScreen extends AppCompatActivity {
     private EditText responseText;
     private FirestoreHandler firestoreHandler;
     private String docId;
+    private RelativeLayout responseView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class IssueResponsesScreen extends AppCompatActivity {
         responsesList.setLayoutManager(new LinearLayoutManager(this));
         sendResponse = findViewById(R.id.sendResponse);
         responseText = findViewById(R.id.responseText);
+        responseView = findViewById(R.id.responseView);
 
         Intent currentIntent = getIntent();
         responses = (ArrayList<HashMap<String, Object>>) currentIntent.getExtras().get("responses");
@@ -48,6 +51,9 @@ public class IssueResponsesScreen extends AppCompatActivity {
                 makeResponse();
             }
         });
+
+        if (FirestoreHandler.USER_TYPE.equals(FirestoreHandler.PAT_ID))
+            responseView.setVisibility(View.GONE);
     }
 
     private void makeResponse() {

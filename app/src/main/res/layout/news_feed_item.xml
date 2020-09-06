@@ -92,6 +92,19 @@
             android:text="Consult in private"
             android:textColor="@android:color/white"/>
 
+        <Button
+            android:id="@+id/showAnswers"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:layout_alignParentBottom="true"
+            android:background="#1E57CA"
+            android:layout_marginBottom="10dp"
+            android:text="Show Answers"
+            android:textColor="@android:color/white"
+            android:visibility="invisible"/>
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

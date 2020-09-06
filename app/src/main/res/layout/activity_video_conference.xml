@@ -26,6 +26,13 @@
         android:alpha="0.6"
         android:visibility="invisible"/>
 
+    <ProgressBar
+        android:id="@+id/connectProgress"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"/>
+
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/connectButton"
         android:layout_width="60dp"

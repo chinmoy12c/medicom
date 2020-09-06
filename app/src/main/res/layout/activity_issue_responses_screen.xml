@@ -18,6 +18,12 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.7dp"
+            android:background="#cccccc"
+            />
+
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/responseText"
             android:layout_width="match_parent"
@@ -37,11 +43,5 @@
             android:src="@drawable/ic_baseline_send_24"/>
 
     </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.7dp"
-        android:background="#cccccc"
-        android:layout_above="@+id/responseView"/>
 
 </RelativeLayout>

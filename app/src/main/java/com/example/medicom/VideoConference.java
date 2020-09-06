@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,9 +36,11 @@ public class VideoConference extends AppCompatActivity implements Connector.ICon
     private TextView messageBox;
     private Connector videoConnector;
     private ImageView joinCall;
+    private ProgressBar connectProgress;
     private Activity currentActivity = this;
     private boolean isConnected = false;
-    private final String accessToken = "cHJvdmlzaW9uAERlbW9Vc2VyQDllYmIwYi52aWR5by5pbwA2Mzc2NjQ1MzQ2MQAANmMwOGFiMWYwNDg2NTFmMTA0YTcyZWJhYzY1NWMzNmI0ZjA2NjRhMTk5YzJjMWJiZWRiZmI3N2VlZTUyZTZmZmMzM2UyNWYyYjA5ZDgxMmYwNDkwZTNlYjY2YjA1ZjI1";
+    private FirestoreHandler firestoreHandler;
+    private String accessToken = "";
     private ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener = null;
 
     private static final String[] mPermissions = new String[] {
@@ -56,6 +59,10 @@ public class VideoConference extends AppCompatActivity implements Connector.ICon
         videoView = findViewById(R.id.videoView);
         messageBox = findViewById(R.id.messageBox);
         joinCall = findViewById(R.id.connectButton);
+        connectProgress = findViewById(R.id.connectProgress);
+
+        firestoreHandler = new FirestoreHandler(this);
+        firestoreHandler.getAccessToken(this);
 
         ConnectorPkg.setApplicationUIContext(this);
         if (ConnectorPkg.initialize()) {
@@ -120,6 +127,10 @@ public class VideoConference extends AppCompatActivity implements Connector.ICon
         }
     }
 
+    void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
     private void startVideoViewSizeListener() {
         // Render the video each time that the video view (mVideoFrame) is resized. This will
         // occur upon activity creation, orientation changes, and when foregrounding the app.
@@ -165,6 +176,13 @@ public class VideoConference extends AppCompatActivity implements Connector.ICon
                     "DemoUser",
                     "DemoRoom",
                     this);
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    connectProgress.setVisibility(View.VISIBLE);
+                }
+            });
         }
 
     }
@@ -202,11 +220,23 @@ public class VideoConference extends AppCompatActivity implements Connector.ICon
         showMsg("Connected to room");
         changeUIState();
         isConnected = !isConnected;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                connectProgress.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override
     public void onFailure(Connector.ConnectorFailReason connectorFailReason) {
         showMsg("Connection failed");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                connectProgress.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override

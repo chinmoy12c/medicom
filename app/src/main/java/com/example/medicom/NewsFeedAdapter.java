@@ -67,7 +67,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
 
         private ImageView postImage;
         private TextView postUsername, postTime, postDescription, answersCount;
-        private Button consultPrivate, consultPublic;
+        private Button consultPrivate, consultPublic, showAnswers;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,10 +79,12 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
             answersCount = itemView.findViewById(R.id.answersCount);
             consultPrivate = itemView.findViewById(R.id.consultPrivate);
             consultPublic = itemView.findViewById(R.id.consultPublic);
+            showAnswers = itemView.findViewById(R.id.showAnswers);
 
             if (FirestoreHandler.USER_TYPE.equals(FirestoreHandler.PAT_ID)) {
                 consultPublic.setVisibility(View.GONE);
                 consultPrivate.setVisibility(View.GONE);
+                showAnswers.setVisibility(View.VISIBLE);
             }
 
         }
@@ -114,6 +116,13 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
                     responseIntent.putExtra("docId", docIds.get(position));
 
                     context.startActivity(responseIntent);
+                }
+            });
+
+            showAnswers.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    consultPublic.callOnClick();
                 }
             });
         }
