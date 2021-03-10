@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-
+//This is a new change another change
 public class FakeNewsAdapter extends RecyclerView.Adapter<FakeNewsAdapter.ViewHolder> {
 
     Context context;
