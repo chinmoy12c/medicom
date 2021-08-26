@@ -164,13 +164,32 @@ public class FirestoreHandler {
                 });
     }
 
-    public void loginUser(String userId, String userPass) {
+    public void loginUser(final String userId, String userPass) {
         firebaseAuth.signInWithEmailAndPassword(userId, userPass)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        FirestoreHandler.USER_TYPE = FirestoreHandler.PAT_ID;
-                        context.startActivity(new Intent(context, MainActivity.class));
+                        db.collection("users").whereEqualTo("userId", userId)
+                                .whereEqualTo("userType", "PATIENT")
+                                .get()
+                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                        if (!queryDocumentSnapshots.isEmpty()) {
+                                            FirestoreHandler.USER_TYPE = FirestoreHandler.PAT_ID;
+                                            context.startActivity(new Intent(context, MainActivity.class));
+                                        }
+                                        else {
+                                            Toast.makeText(context, "No user with this userID exists!", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        showError(e);
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -347,13 +366,32 @@ public class FirestoreHandler {
         });
     }
 
-    public void loginDoctor(String doctorId, String doctorPass) {
+    public void loginDoctor(final String doctorId, String doctorPass) {
         firebaseAuth.signInWithEmailAndPassword(doctorId, doctorPass)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        FirestoreHandler.USER_TYPE = FirestoreHandler.DOC_ID;
-                        context.startActivity(new Intent(context, MainActivity.class));
+                        db.collection("users").whereEqualTo("userId", doctorId)
+                                .whereEqualTo("userType", "DOCTOR")
+                                .get()
+                                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                        if (!queryDocumentSnapshots.isEmpty()) {
+                                            FirestoreHandler.USER_TYPE = FirestoreHandler.DOC_ID;
+                                            context.startActivity(new Intent(context, MainActivity.class));
+                                        }
+                                        else {
+                                            Toast.makeText(context, "No doctor with this userID exists!", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        showError(e);
+                                    }
+                                });
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
