@@ -135,7 +135,6 @@ public class FirestoreHandler {
                                     public void onSuccess(AuthResult authResult) {
                                         HashMap<String, Object> userData = new HashMap<>();
                                         userData.put("userId", userId);
-                                        userData.put("userPass", userPass);
                                         userData.put("userType", "PATIENT");
                                         userData.put("consultAccess", false);
                                         db.collection(USERS_COLLECTION).add(userData);
@@ -377,6 +376,24 @@ public class FirestoreHandler {
                                 showError(e);
                             }
                         });
+                    }
+                });
+    }
+
+    public void getAvailableDoctors(final RecyclerView availableDoctorsList) {
+        db.collection("users").whereEqualTo("userType", "DOCTOR")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        AvailableDoctorsAdapter availableDoctorsAdapter = new AvailableDoctorsAdapter(context, queryDocumentSnapshots);
+                        availableDoctorsList.setAdapter(availableDoctorsAdapter);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showError(e);
                     }
                 });
     }

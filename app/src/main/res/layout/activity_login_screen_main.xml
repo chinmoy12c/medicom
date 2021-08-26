@@ -49,7 +49,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rounded_button_grad_blue"
-                android:text="Login as doctor"
+                android:text="I am a Doctor"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
                 android:onClick="showDoctorLogin"/>
@@ -63,7 +63,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/rounded_button_grad_green"
-                android:text="login as user"
+                android:text="I am a User"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
                 android:onClick="showUserLogin"/>

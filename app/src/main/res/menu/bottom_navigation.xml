@@ -17,4 +17,9 @@
         android:title="Messages"
         android:icon="@drawable/ic_baseline_chat_24"/>
 
+    <item android:id="@+id/doctorSearch"
+        android:title="Search Doctors"
+        android:icon="@drawable/ic_baseline_person_pin_24"
+        />
+
 </menu>

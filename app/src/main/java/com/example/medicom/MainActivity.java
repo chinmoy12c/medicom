@@ -70,6 +70,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 loadScreen(new MessagesFragment());
                 bottomNavigationView.getMenu().getItem(3).setChecked(true);
                 break;
+
+            case R.id.doctorSearch:
+                loadScreen(new DoctorSearchFragment());
+                bottomNavigationView.getMenu().getItem(4).setChecked(true);
+                break;
         }
 
         return false;
