@@ -102,12 +102,18 @@ public class FirestoreHandler {
         newsList.setAdapter(new FakeNewsAdapter(context,fakeNews));
     }
 
-    public void fetchNeedHelp(final RecyclerView needHelpList) {
+    public void fetchNeedHelp(final RecyclerView needHelpList, final RelativeLayout noSignalContainer) {
         db.collection(STRESS_SIGNALS).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        needHelpList.setAdapter(new NeedHelpAdapter(context, queryDocumentSnapshots));
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            needHelpList.setAdapter(new NeedHelpAdapter(context, queryDocumentSnapshots));
+                            needHelpList.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            noSignalContainer.setVisibility(View.VISIBLE);
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

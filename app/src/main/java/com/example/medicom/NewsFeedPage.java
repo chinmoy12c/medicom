@@ -36,7 +36,7 @@ public class NewsFeedPage extends Fragment {
     private EditText probDesc;
     private ImageView addIssue;
     private BottomNavigationView bottomNavigationView;
-    private RelativeLayout sendSignalView, signalSentView;
+    private RelativeLayout sendSignalView, signalSentView, noSignalContainer;
 
     public NewsFeedPage(BottomNavigationView bottomNavigationView) {
         this.bottomNavigationView = bottomNavigationView;
@@ -57,6 +57,7 @@ public class NewsFeedPage extends Fragment {
         sendStressSignal = rootView.findViewById(R.id.sendStressSignal);
         sendSignalView = rootView.findViewById(R.id.sendSignalView);
         signalSentView = rootView.findViewById(R.id.signalSentView);
+        noSignalContainer = rootView.findViewById(R.id.noSignalContainer);
 
         newsList.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -68,8 +69,7 @@ public class NewsFeedPage extends Fragment {
         }
         else {
             needHelpList.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-            firestoreHandler.fetchNeedHelp(needHelpList);
-            needHelpList.setVisibility(View.VISIBLE);
+            firestoreHandler.fetchNeedHelp(needHelpList, noSignalContainer);
         }
 
         background.setOnClickListener(new View.OnClickListener() {

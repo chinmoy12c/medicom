@@ -26,6 +26,31 @@
         android:textSize="18sp"
         android:textStyle="bold"/>
 
+    <RelativeLayout
+        android:id="@+id/noSignalContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/needHelpBanner"
+        android:visibility="invisible">
+
+        <ImageView
+            android:id="@+id/peaceImg"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/peace_symbol"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No signals active"
+            android:layout_below="@id/peaceImg"
+            android:layout_marginTop="5dp"
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"/>
+
+    </RelativeLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/needHelpContainer"
         android:layout_width="match_parent"
