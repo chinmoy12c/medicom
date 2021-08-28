@@ -160,8 +160,8 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="100dp"
-        app:cardCornerRadius="20dp"
-        android:visibility="invisible">
+        app:cardCornerRadius="0dp"
+        android:visibility="visible">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -171,11 +171,12 @@
                 android:id="@+id/problemBanner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Describe your problem"
-                android:textSize="20sp"
-                android:textStyle="bold"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/advent_pro_medium"
+                android:text="Describe your problem"
+                android:textSize="25sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/problemDescription"
@@ -198,9 +199,9 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_button_grad_blue"
-                android:text="Done"
-                android:textColor="#ffffff"
+                android:background="@drawable/rectangle_edit_text_blue"
+                android:text="Post"
+                android:textColor="#150505"
                 android:textSize="18sp"/>
 
         </RelativeLayout>

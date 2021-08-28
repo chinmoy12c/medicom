@@ -55,25 +55,25 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
 
 
-            case R.id.fakeNewsPage:
+           /* case R.id.fakeNewsPage:
                 loadScreen(new FakeNewsFragment());
                 bottomNavigationView.getMenu().getItem(1).setChecked(true);
                 //Toast.makeText(MainActivity.this,"Works",Toast.LENGTH_SHORT).show();
-                break;
+                break;*/
 
             case R.id.appointmentsPage:
                 loadScreen(new AppointmentsFragment());
-                bottomNavigationView.getMenu().getItem(2).setChecked(true);
+                bottomNavigationView.getMenu().getItem(1).setChecked(true);
                 break;
 
             case R.id.messagesPage:
                 loadScreen(new MessagesFragment());
-                bottomNavigationView.getMenu().getItem(3).setChecked(true);
+                bottomNavigationView.getMenu().getItem(2).setChecked(true);
                 break;
 
             case R.id.doctorSearch:
                 loadScreen(new DoctorSearchFragment());
-                bottomNavigationView.getMenu().getItem(4).setChecked(true);
+                bottomNavigationView.getMenu().getItem(3).setChecked(true);
                 break;
         }
 

@@ -5,10 +5,6 @@
         android:title="News Feed"
         android:icon="@drawable/ic_baseline_dynamic_feed_24"/>
 
-    <item android:id="@+id/fakeNewsPage"
-        android:title="Fake news"
-        android:icon="@drawable/ic_baseline_stop_screen_share_24"/>
-
     <item android:id="@+id/appointmentsPage"
         android:title="Appointments"
         android:icon="@drawable/ic_baseline_voice_chat_24"/>
