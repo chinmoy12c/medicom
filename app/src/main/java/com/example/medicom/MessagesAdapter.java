@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -70,7 +71,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private EditText messageText;
+        private TextView messageText;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
