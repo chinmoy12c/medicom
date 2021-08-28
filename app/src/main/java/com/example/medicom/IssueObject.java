@@ -16,6 +16,7 @@ public class IssueObject implements Serializable {
     private String issueId;
     private String userDp;
     private boolean isOpen;
+    private boolean isPrivate;
     private Timestamp time;
     private ArrayList<HashMap<String, Object>> responses;
 
@@ -30,6 +31,7 @@ public class IssueObject implements Serializable {
         isOpen = (boolean) issue.get("open");
         time = (Timestamp) issue.get("time");
         userName = (String) issue.get("userName");
+        isPrivate = (boolean) issue.get("isPrivate");
         responses = (ArrayList<HashMap<String, Object>>) issue.get("responses");
     }
 
@@ -81,6 +83,10 @@ public class IssueObject implements Serializable {
         this.time = time;
     }
 
+    public void setIsPrivate(boolean isPrivate) {
+        this.isPrivate = isPrivate;
+    }
+
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -99,5 +105,9 @@ public class IssueObject implements Serializable {
 
     public String getUserName() {
         return userName;
+    }
+
+    public boolean getIsPrivate() {
+        return isPrivate;
     }
 }

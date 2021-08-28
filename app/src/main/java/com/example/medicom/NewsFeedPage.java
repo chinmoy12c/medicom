@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,6 +36,7 @@ public class NewsFeedPage extends Fragment {
     private Button postProb, sendStressSignal;
     private EditText probDesc;
     private ImageView addIssue;
+    private CheckBox isPrivate;
     private BottomNavigationView bottomNavigationView;
     private RelativeLayout sendSignalView, signalSentView, noSignalContainer;
 
@@ -58,6 +60,7 @@ public class NewsFeedPage extends Fragment {
         sendSignalView = rootView.findViewById(R.id.sendSignalView);
         signalSentView = rootView.findViewById(R.id.signalSentView);
         noSignalContainer = rootView.findViewById(R.id.noSignalContainer);
+        isPrivate = rootView.findViewById(R.id.isPrivate);
 
         newsList.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -113,6 +116,7 @@ public class NewsFeedPage extends Fragment {
         issueObject.setDescription(prob);
         issueObject.setIssueId(UUID.randomUUID().toString());
         issueObject.setisOpen(true);
+        issueObject.setIsPrivate(isPrivate.isChecked());
         issueObject.setUserName(firestoreHandler.getUserName());
         issueObject.setTime(Timestamp.now());
         issueObject.setResponses(new ArrayList<HashMap<String, Object>>());

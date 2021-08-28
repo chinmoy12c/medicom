@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -29,14 +30,18 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
     NewsFeedAdapter(Context context, QuerySnapshot issuesList, RecyclerView newsListRecycler) {
         this.context = context;
         this.newsListRecycler = newsListRecycler;
-        parseIssues(issuesList);
         firestoreHandler = new FirestoreHandler(context);
+        parseIssues(issuesList);
     }
 
     private void parseIssues(QuerySnapshot issuesList) {
         for(DocumentSnapshot issue: issuesList){
-            issueList.add(new IssueObject(issue));
-            docIds.add(issue.getId());
+            IssueObject issueObject = new IssueObject(issue);
+            if (firestoreHandler.USER_TYPE.equals(firestoreHandler.DOC_ID) || issueObject.getUserId().equals(firestoreHandler.getUser())
+                    || !issueObject.getIsPrivate()) {
+                issueList.add(issueObject);
+                docIds.add(issue.getId());
+            }
         }
     }
     public void addContent(IssueObject issueObject){
@@ -59,6 +64,11 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
+    @Override
     public int getItemCount() {
         return issueList.size();
     }
@@ -68,6 +78,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
         private ImageView postImage;
         private TextView postUsername, postTime, postDescription, answersCount;
         private Button consultPrivate, consultPublic, showAnswers;
+        private CardView issueCard;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -80,6 +91,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
             consultPrivate = itemView.findViewById(R.id.consultPrivate);
             consultPublic = itemView.findViewById(R.id.consultPublic);
             showAnswers = itemView.findViewById(R.id.showAnswers);
+            issueCard = itemView.findViewById(R.id.issueCard);
 
             if (FirestoreHandler.USER_TYPE.equals(FirestoreHandler.PAT_ID)) {
                 consultPublic.setVisibility(View.GONE);
@@ -91,6 +103,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
 
         public void bind(final int position) {
             final IssueObject currentIssue = issueList.get(position);
+
             new FirestoreHandler(context).setImage(postImage, currentIssue.getUserDp());
             postUsername.setText(currentIssue.getUserName());
             postTime.setText(DateUtils.getRelativeTimeSpanString(currentIssue.getTime().getSeconds() * 1000));
