@@ -76,6 +76,16 @@ public class FirestoreHandler {
         //TODO:: Change this
     }
 
+    String getUserName() {
+        String name = "";
+        try {
+            name = firebaseAuth.getCurrentUser().getDisplayName();
+        }catch (Exception e) {}
+        if (name == null)
+            name = getUser().substring(0, getUser().indexOf("@"));
+        return name;
+    }
+
     void fetchNewsFeed(final RecyclerView newsList) {
         db.collection(ISSUE_COLLECTION).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

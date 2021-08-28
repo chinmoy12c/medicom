@@ -64,6 +64,7 @@ public class IssueResponsesScreen extends AppCompatActivity {
         responseData.put("responseDescription", responseText.getText().toString().trim());
         responseData.put("responseDp", "https://us.123rf.com/450wm/nerthuz/nerthuz1608/nerthuz160800059/62345951-caduceus-medical-symbol.jpg?ver=6");
         responseData.put("responseId", firestoreHandler.getUser());
+        responseData.put("responseUserName", firestoreHandler.getUserName());
         responseData.put("responseTime", Timestamp.now());
 
         responses.add(responseData);

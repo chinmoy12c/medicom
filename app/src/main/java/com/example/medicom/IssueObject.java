@@ -12,6 +12,7 @@ public class IssueObject implements Serializable {
 
     private String description;
     private String userId;
+    private String userName;
     private String issueId;
     private String userDp;
     private boolean isOpen;
@@ -28,6 +29,7 @@ public class IssueObject implements Serializable {
         userDp = (String) issue.get("userDp");
         isOpen = (boolean) issue.get("open");
         time = (Timestamp) issue.get("time");
+        userName = (String) issue.get("userName");
         responses = (ArrayList<HashMap<String, Object>>) issue.get("responses");
     }
 
@@ -79,6 +81,10 @@ public class IssueObject implements Serializable {
         this.time = time;
     }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public void setResponses(ArrayList<HashMap<String, Object>> responses) {
         this.responses = responses;
     }
@@ -89,5 +95,9 @@ public class IssueObject implements Serializable {
 
     public void setOpen(boolean open) {
         isOpen = open;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }

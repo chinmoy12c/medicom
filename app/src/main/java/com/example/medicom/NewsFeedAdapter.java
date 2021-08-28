@@ -92,7 +92,7 @@ public class NewsFeedAdapter extends RecyclerView.Adapter<NewsFeedAdapter.MyView
         public void bind(final int position) {
             final IssueObject currentIssue = issueList.get(position);
             new FirestoreHandler(context).setImage(postImage, currentIssue.getUserDp());
-            postUsername.setText(currentIssue.getUserId());
+            postUsername.setText(currentIssue.getUserName());
             postTime.setText(DateUtils.getRelativeTimeSpanString(currentIssue.getTime().getSeconds() * 1000));
             postDescription.setText(currentIssue.getDescription());
             answersCount.setText(String.valueOf(currentIssue.getResponses().size()));

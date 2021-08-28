@@ -1,10 +1,12 @@
 package com.example.medicom;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -45,19 +47,33 @@ public class AvailableDoctorsAdapter extends RecyclerView.Adapter<AvailableDocto
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView doctorName, degrees, specialization;
+        private Button bookDoctor;
+        private FirestoreHandler firestoreHandler;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             doctorName = itemView.findViewById(R.id.doctorName);
             degrees = itemView.findViewById(R.id.degrees);
             specialization = itemView.findViewById(R.id.specialization);
+            bookDoctor = itemView.findViewById(R.id.bookDoctor);
+            firestoreHandler = new FirestoreHandler(context);
         }
 
         public void bind(int position) {
-            DoctorProfileModel currentDoctor = new DoctorProfileModel(queryDocumentSnapshots.getDocuments().get(position));
+            final DoctorProfileModel currentDoctor = new DoctorProfileModel(queryDocumentSnapshots.getDocuments().get(position));
             doctorName.setText(currentDoctor.getName());
             degrees.setText(currentDoctor.getDegrees());
             specialization.setText(currentDoctor.getSpecialization());
+            bookDoctor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent chatIntent = new Intent(context, ChatScreen.class);
+                    chatIntent.putExtra("pat", firestoreHandler.getUser());
+                    chatIntent.putExtra("doc", currentDoctor.getId());
+                    chatIntent.putExtra("type", "NORM");
+                    context.startActivity(chatIntent);
+                }
+            });
         }
     }
 }

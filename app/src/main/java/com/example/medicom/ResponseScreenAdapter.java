@@ -64,7 +64,7 @@ public class ResponseScreenAdapter extends RecyclerView.Adapter<ResponseScreenAd
         public void bind(int position) {
             IssueResponseObject currentResponse = new IssueResponseObject(responses.get(position));
             new FirestoreHandler(context).setImage(responseImage, currentResponse.getResponseDp());
-            responseUsername.setText(currentResponse.getResponseId());
+            responseUsername.setText(currentResponse.getResponseUserName());
             responseTime.setText(DateUtils.getRelativeTimeSpanString(currentResponse.getResponseTime().getSeconds() * 1000));
             responseDescription.setText(currentResponse.getResponseDescription());
         }

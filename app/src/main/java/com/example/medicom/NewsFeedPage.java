@@ -113,6 +113,7 @@ public class NewsFeedPage extends Fragment {
         issueObject.setDescription(prob);
         issueObject.setIssueId(UUID.randomUUID().toString());
         issueObject.setisOpen(true);
+        issueObject.setUserName(firestoreHandler.getUserName());
         issueObject.setTime(Timestamp.now());
         issueObject.setResponses(new ArrayList<HashMap<String, Object>>());
         issueObject.setUserDp("https://us.123rf.com/450wm/nerthuz/nerthuz1608/nerthuz160800059/62345951-caduceus-medical-symbol.jpg?verhttps://us.123rf.com/450wm/nerthuz/nerthuz1608/nerthuz160800059/62345951-caduceus-medical-symbol.jpg?ver=6=6");
