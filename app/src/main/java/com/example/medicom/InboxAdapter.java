@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder> {
@@ -53,18 +54,21 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView userName;
+        private TextView userName, lastMessageView;
         private RelativeLayout chatItem;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             userName = itemView.findViewById(R.id.userName);
             chatItem = itemView.findViewById(R.id.chatItem);
+            lastMessageView = itemView.findViewById(R.id.lastMessage);
         }
 
         public void bind(int position) {
             DocumentSnapshot currentChat = chats.get(position);
             String userId = (String) currentChat.get("chatIdDoc");
+            ArrayList<String> messages = (ArrayList<String>) currentChat.get("messages");
+            String lastMessage = "no messages";
             final String docId = userId.substring(0, userId.indexOf("_" ));
             final String patId = userId.substring(userId.indexOf("_") + 1);
 
@@ -73,7 +77,11 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
             else
                 userId = patId;
 
+            if (messages.size() != 0)
+                lastMessage = messages.get(messages.size() - 1).substring(messages.get(messages.size() - 1).lastIndexOf("*") + 1);
+
             userName.setText(userId);
+            lastMessageView.setText(lastMessage);
 
             chatItem.setOnClickListener(new View.OnClickListener() {
                 @Override
